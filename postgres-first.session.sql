@@ -87,6 +87,7 @@ CREATE TABLE cars (
 DROP TABLE users;
 
 CREATE TABLE users(
+    ID serial PRIMARY KEY,
     first_name VARCHAR(256) NOT NULL CHECK (first_name != ''),
     last_name VARCHAR(256) NOT NULL CHECK (last_name != ''),
     birth_date date CHECK (birth_date > '1900-01-01' AND birth_date < current_date),
@@ -165,7 +166,7 @@ INSERT INTO messages (body, author, id) VALUES
 DROP TABLE cars;
 
 CREATE TABLE cars (
-    id serial NOT NULL UNIQUE,
+    id serial PRIMARY KEY,
     brand VARCHAR(300) NOT NULL CHECK(brand != ''),
     model VARCHAR(300) NOT NULL CHECK(model != ''),
     year DATE,
@@ -175,3 +176,27 @@ CREATE TABLE cars (
     body_type VARCHAR(100),
     fuel_type VARCHAR(100)
 );
+
+/*
+NOT NULL + UNIQUE - це поєднання обмежень гарантує, що певне значення буде завжди + воно буде унікальним
+
+Визначення стовпця (або сукупності стовпців) первинним ключем = NOT NULL + UNIQUE
+
+Первинний ключ - значення, яке є унікальним, існуючим завжди і є таким, на яке ми можемо покладатися для однозначної ідентифікації об'єкта
+*/
+
+DROP TABLE d;
+
+CREATE TABLE d (
+    a VARCHAR(2) NOT NULL,
+    b VARCHAR(2) NOT NULL,
+    CONSTRAINT "unique_pair" PRIMARY KEY (a, b)
+);
+
+INSERT INTO d VALUES
+('XX', 'YY');
+
+INSERT INTO d VALUES
+('YY', 'YY'),
+('XX', 'XX');
+
