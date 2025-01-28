@@ -121,3 +121,57 @@ INSERT INTO users (first_name, last_name, birth_date, email, user_password, heig
  INSERT INTO users (first_name, last_name, email, birth_date, user_password, height, is_subscribe) VALUES 
 ('Rick', 'Doe', 'fare333@j.sdf', '1993-02-03', 'kjhf@#$ujhsdf', 3.0, FALSE);
 
+/*
+Створити таблицю для повідомлень (messages)
+    body рядок тексту, не пустий, максимум 5000
+    автор рядок тексту, не пустий, 256
+    дата створення - таймштемп, по дефолту поточний
+    чи прочитано - бул, по дефолту не прочитане
+*/
+DROP TABLE messages;
+
+CREATE TABLE messages(
+    id serial NOT NULL UNIQUE,
+    body VARCHAR(5000) NOT NULL CHECK (body != ''),
+    author VARCHAR(256) NOT NULL CHECK (author != ''),
+    created_at TIMESTAMP DEFAULT current_timestamp,
+    is_read BOOL DEFAULT FALSE
+);
+
+INSERT INTO messages (body, author) VALUES
+('Hello', 'John'), ('Hi', 'Jane');
+
+INSERT INTO messages (body) VALUES 
+('Hello');
+INSERT INTO messages (body, author, id) VALUES 
+('Hello', 'John', 7);
+
+/*
+Переробити таблицю машин
+ Таска:
+описати таблицю машин
+Машина
+    - бренд - рядок - обов'язковий, не пустий
+    - модель - рядок - не пуста
+    - рік випуску - дата з 01-01
+    - літраж (об'єм бака) - 40 - ціле число від 0 до 1500
+    - колір - рядок
+    - об'єм двигуна (1600) - ціле число
+    - тип кузова (седан, універсал) - рядок
+    - тип пального - рядок
+    - ідентифікатор
+*/
+
+DROP TABLE cars;
+
+CREATE TABLE cars (
+    id serial NOT NULL UNIQUE,
+    brand VARCHAR(300) NOT NULL CHECK(brand != ''),
+    model VARCHAR(300) NOT NULL CHECK(model != ''),
+    year DATE,
+    volume INT CHECK(volume BETWEEN 0 AND 1500),
+    color VARCHAR(100),
+    engine_volume INT,
+    body_type VARCHAR(100),
+    fuel_type VARCHAR(100)
+);
