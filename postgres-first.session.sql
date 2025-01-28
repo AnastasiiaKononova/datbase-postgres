@@ -16,7 +16,7 @@ DROP TABLE my_first_table;
     - підписку - або так, або ні
 */
 
-DROP TABLE users;
+
 
 CREATE TABLE users(
     first_name VARCHAR(256),
@@ -44,6 +44,7 @@ INSERT INTO users (last_name, first_name, email, birth_date, is_subscribe) VALUE
 ('Snow', 'Kick', 'kjhfds', '1990-01-01', TRUE),
 ('Rnow', 'Lick', 'khfds', '2000-01-01', FALSE),
 ('Dnow', 'Snick', 'kjsher', '1220-10-10', FALSE);
+
 
 ------------------------
 DROP TABLE second_table; 
@@ -79,3 +80,33 @@ CREATE TABLE cars (
     body_type VARCHAR(100),
     fuel_type VARCHAR(100)
 );
+
+
+/* constraints */
+
+DROP TABLE users;
+
+CREATE TABLE users(
+    first_name VARCHAR(256) NOT NULL CHECK (first_name != ''),
+    last_name VARCHAR(256) NOT NULL CHECK (last_name != ''),
+    birth_date date,
+    email VARCHAR(300) NOT NULL UNIQUE CHECK(email != ''),
+    user_password VARCHAR(300) NOT NULL CHECK(user_password != ''),
+    height numeric(3,2) CONSTRAINT normal_height CHECK (height < 5.0 AND height > 0),
+    is_subscribe bool NOT NULL
+);
+
+/* обмеження вказуються при визначенні стовпця або всієї таблиці */
+
+INSERT INTO users (first_name, last_name, email, user_password, height, is_subscribe) VALUES 
+('', '', 'fare@j.sdf', 'kjhf@#$ujhsdf', 8.0, FALSE);
+
+/* Constraint "users_height_check"
+У будь-якого обмеження (констрейнту) є ім'я, за яким ми можемо до нього доступитися
+По дефолту, якщо не вказано іншого, ім'я формується за принципом:
+ім'яТаблиці_ім'яСтовпця_типПеревірки
+ */
+
+
+ INSERT INTO users (first_name, last_name, email, user_password, height, is_subscribe) VALUES 
+('Rick', 'Doe', 'fare333@j.sdf', 'kjhf@#$ujhsdf', 3.0, FALSE); -- "users_email_key"
