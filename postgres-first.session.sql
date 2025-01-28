@@ -89,17 +89,18 @@ DROP TABLE users;
 CREATE TABLE users(
     first_name VARCHAR(256) NOT NULL CHECK (first_name != ''),
     last_name VARCHAR(256) NOT NULL CHECK (last_name != ''),
-    birth_date date,
+    birth_date date CHECK (birth_date > '1900-01-01' AND birth_date < current_date),
     email VARCHAR(300) NOT NULL UNIQUE CHECK(email != ''),
     user_password VARCHAR(300) NOT NULL CHECK(user_password != ''),
-    height numeric(3,2) CONSTRAINT normal_height CHECK (height < 5.0 AND height > 0),
-    is_subscribe bool NOT NULL
+    height numeric(3,2) CONSTRAINT normal_height CHECK (height BETWEEN 0 AND 5.0),
+    is_subscribe bool NOT NULL,
+    created_at TIMESTAMP DEFAULT current_timestamp
 );
 
 /* обмеження вказуються при визначенні стовпця або всієї таблиці */
 
-INSERT INTO users (first_name, last_name, email, user_password, height, is_subscribe) VALUES 
-('', '', 'fare@j.sdf', 'kjhf@#$ujhsdf', 8.0, FALSE);
+INSERT INTO users (first_name, last_name, birth_date, email, user_password, height, is_subscribe) VALUES 
+('', '','2025-09-23', 'fare@j.shhf', 'kjhf@#$ujhsdf', 8.0, FALSE);
 
 /* Constraint "users_height_check"
 У будь-якого обмеження (констрейнту) є ім'я, за яким ми можемо до нього доступитися
@@ -108,5 +109,15 @@ INSERT INTO users (first_name, last_name, email, user_password, height, is_subsc
  */
 
 
- INSERT INTO users (first_name, last_name, email, user_password, height, is_subscribe) VALUES 
-('Rick', 'Doe', 'fare333@j.sdf', 'kjhf@#$ujhsdf', 3.0, FALSE); -- "users_email_key"
+ INSERT INTO users (first_name, last_name, email, birth_date, user_password, height, is_subscribe) VALUES 
+ ('Kick', 'Loe', 'ffgh333@j.hgf', '1996-02-03', 'kkklf@#$ujhsdf', 3.0, FALSE),
+('Rick', 'Doe', 'fare333@j.sdf', '1993-02-03', 'kjhf@#$ujhsdf', 3.0, FALSE); -- "users_email_key"
+
+
+ INSERT INTO users (first_name, last_name, email, birth_date, user_password, height, is_subscribe) VALUES 
+ ('Kick', 'Loe', 'ffgh333@j.hgf', '1996-02-03', 'kkklf@#$ujhsdf', 3.0, FALSE);
+
+
+ INSERT INTO users (first_name, last_name, email, birth_date, user_password, height, is_subscribe) VALUES 
+('Rick', 'Doe', 'fare333@j.sdf', '1993-02-03', 'kjhf@#$ujhsdf', 3.0, FALSE);
+
