@@ -200,3 +200,19 @@ INSERT INTO d VALUES
 ('YY', 'YY'),
 ('XX', 'XX');
 
+/*
+Створити таблицю котів
+- ім'я - обов'язкове, не пусте
+- ідентифікатор - перв.ключ
+- порода - рядок - не обов'язкове
+- колір - рядок, не обов'язковий
+- вага - не обов'язкове, але > 0 і менще за 100
+*/
+
+CREATE TABLE cats(
+    id serial PRIMARY KEY,
+    name VARCHAR(300) NOT NULL CHECK(name != ''),
+    breed VARCHAR(300),
+    color VARCHAR(300),
+    weight INT CHECK(weight between 0 AND 100)
+);
