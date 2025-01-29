@@ -146,3 +146,41 @@ CREATE TABLE books (
 DROP TABLE books; -- першою маємо видаляти підлеглу (залежну) таблицю, ЯКА посилається
 
 DROP TABLE readers; -- і тільки після цього можемо видалити іншу, на яку йшло посилання
+
+/*
+Створити чат між юзерами
+
+Чат
+    - id
+    - назва
+    - власник чату (id певного юзера)
+    - дата створення чату
+
+До чатів можуть додаватися юзери
+В 1 чаті може бути багато юзерів
+1 юзер може вступити до багатьох чатів - m:n
+
+chats_to_users
+    - посилання на юзера
+    - посилання на чат
+(юзер в тому самому чаті не може сидіти двічі)
+*/
+
+CREATE TABLE chats (
+    id serial PRIMARY KEY,
+    name VARCHAR(300),
+    owner_id INT REFERENCES users(id),
+    created_at timestamp NOT NULL DEFAULT current_timestamp
+);
+
+INSERT INTO chats (name, owner_id) VALUES
+('First chat', 1);
+
+CREATE TABLE chats_to_users (
+    user_id int REFERENCES users,
+    chat_id int REFERENCES chats,
+    PRIMARY KEY (user_id, chat_id)
+);
+
+INSERT INTO chats_to_users (user_id, chat_id) VALUES 
+(2, 1), (3,1);
