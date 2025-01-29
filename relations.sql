@@ -106,3 +106,43 @@ CREATE TABLE orders_to_products (
  INSERT INTO orders_to_products (order_id, product_id, quantity) VALUES
  (1, 3, 2 ), (1, 2, 10);
 
+/*
+
+Таска: створити таблицю 
+    Книга
+        - id
+        - автор
+        - назва
+        - рік випуску
+        - кількість сторінок
+        - user_id
+
+    Читачі
+        - id
+        - first_name
+        - last_name
+        - email
+
+    Читач може брати книгу в бібліотеці для читання
+    1 книга читається 1 людиною. 1 людина може читати декілька книг - зв'язок 1:m
+*/
+
+CREATE TABLE readers(
+    id serial PRIMARY KEY,
+    first_name VARCHAR(300),
+    last_name VARCHAR(300),
+    email VARCHAR(300)
+);
+
+CREATE TABLE books (
+    id serial PRIMARY KEY,
+    author VARCHAR(300),
+    name VARCHAR(300),
+    year DATE,
+    pages INT,
+    reader_id INT REFERENCES readers(id)
+);
+
+DROP TABLE books; -- першою маємо видаляти підлеглу (залежну) таблицю, ЯКА посилається
+
+DROP TABLE readers; -- і тільки після цього можемо видалити іншу, на яку йшло посилання
