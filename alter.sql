@@ -24,3 +24,6 @@ ADD COLUMN  gender VARCHAR(100);
 
 ALTER TABLE users
 DROP COLUMN user_password;
+
+ALTER TABLE products
+DROP COLUMN name;
