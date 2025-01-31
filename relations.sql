@@ -234,3 +234,18 @@ DROP TABLE dogs;
 (зв'язок m:n)
 
 */
+
+CREATE TABLE content (
+    id serial PRIMARY KEY,
+    name VARCHAR(300) NOT NULL CHECK (name != ''),
+    description TEXT(500),
+    created_at timestamp NOT NULL DEFAULT current_timestamp,
+    author_id INT REFERENCES users(id)
+);
+
+CREATE TABLE reactions (
+    user_id INT REFERENCES users,
+    content_id INT REFERENCES content,
+    is_liked BOOL,
+    PRIMARY KEY (user_id, content_id)
+);
