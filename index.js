@@ -1,39 +1,18 @@
-const {Client} = require('pg');
+const {getUsers} = require('./api/getUsers');
+const {User, client} = require('./models');
 
-const config = {
-    user: 'postgres',
-    password: 'Anastasiia07111607',
-    host: 'localhost',
-    port: 5432,
-    database: 'postgres_first'
-}
-
-async function start() {
 
 // робимо підключення до БД
-const client = new Client(config);
+async function start() {
 
-await client.connect()
-
-const user = {
-    id: 1,
-    first_name: 'Nick',
-    last_name: 'Row',
-    birth_date: '1990-01-01',
-    email: 'fdsfdfd@sf',
-    user_password: 'fsdafsdaf',
-    height: 3.10,
-    is_subscribe: false
-};
+await client.connect();
 
 // робимо роботу
+const userArray = await getUsers();
 
-// Таска: написати insert-запит на вставку юзера в БД
+// просимо модель зганяти запитом до БД
 
-const query = `INSERT INTO users(first_name,last_name, birth_date, email, user_password, height, is_subscribe) VALUES
-('${user.first_name}', '${user.last_name}', '${user.birth_date}', '${user.email}', '${user.user_password}', ${user.height}, ${user.is_subscribe});`
-
-const result = await client.query(query);
+const result  = await User.bulkCreate(userArray);
 console.log(result);
 
 
