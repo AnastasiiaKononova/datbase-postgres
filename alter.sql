@@ -27,3 +27,5 @@ DROP COLUMN user_password;
 
 ALTER TABLE products
 DROP COLUMN name;
+
+DELETE FROM orders;
