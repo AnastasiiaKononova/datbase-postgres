@@ -229,3 +229,25 @@ OFFSET 30;
 
 
 --- localhost:5000/users?page=1&limit=50
+
+-------
+
+SELECT concat(first_name, ' ', last_name) AS "full name"
+FROM users;
+
+SELECT concat(first_name, ' ', last_name) AS "full name"
+FROM users
+WHERE char_length(concat(first_name, ' ', last_name)) > 10;
+
+-- варіант з під-запитом
+
+SELECT * FROM (
+    SELECT id, concat(first_name, ' ', last_name) AS "full name" FROM users 
+) AS "FN"
+WHERE char_length("FN"."full name") > 10;
+
+--- Витягти всіх користувачів, в яких email < 7 символів
+
+SELECT * FROM users
+WHERE char_length(email) < 10;
+
