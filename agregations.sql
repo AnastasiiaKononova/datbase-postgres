@@ -100,4 +100,64 @@ SELECT count(*)
 FROM users
 WHERE extract(years from age(birth_date)) BETWEEN 20 AND 30;
 
+---- Скільки екземплярів по кожному бренду лежить на складі
 
+SELECT sum(quantity), brand
+FROM products
+GROUP BY brand;
+
+-- Скільки окремих сутностей (моделей) лежить на складі?
+
+SELECT count(*), brand
+FROM products
+GROUP BY brand;
+
+-- Таска: середня ціна всіх телефонів на складі
+
+SELECT avg(price)
+FROM products;
+
+-- Таска середня ціна кожного бренду
+
+SELECT avg(price), brand
+FROM products
+GROUP BY brand;
+
+--- Бренд, в якого найменша середня ціна по всіх телефонах 
+
+SELECT min(pwa.average)
+FROM(
+    SELECT avg(price) AS average, brand
+    FROM products
+    GROUP BY brand
+) AS pwa;
+
+-- ДОРОБИТИ ЦЮ ТАСКУ з WITH
+
+
+
+--- Кількість замовлень кожного користувача, який робив замовлення
+
+SELECT count(*), customer_id
+FROM orders
+GROUP BY customer_id;
+
+-- Середню кількість замовлень по всіх юзерах
+
+SELECT avg(owq.quantity)
+FROM (
+    SELECT count(*) AS quantity, customer_id
+    FROM orders
+    GROUP BY customer_id
+    ) AS owq;
+
+--- Середня вартість телефонів в діапазоні цін від 1к до 2к
+
+SELECT avg(price)
+FROM products
+WHERE price BETWEEN 1000 AND 2000;
+
+---- Вартість всього складу
+
+SELECT sum(price*quantity)
+FROM products;
