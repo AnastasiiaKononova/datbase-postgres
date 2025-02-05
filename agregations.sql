@@ -161,3 +161,72 @@ WHERE price BETWEEN 1000 AND 2000;
 
 SELECT sum(price*quantity)
 FROM products;
+
+/*  Сортування та фільтрація груп */
+
+
+-- Задача: яких телефонів на складі залишилось меньше всього?
+
+SELECT min(quantity)
+FROM products;-- 5 телефонів. Яких?
+
+--- Сортування: ORDER BY стовбець_сортування напрямок_сортування
+-- ASC (ascending - збільшення)
+-- DESC (descending - зменшення)
+
+SELECT * FROM products
+ORDER BY quantity DESC;
+
+-- Всі юзери в порядку їхнього id
+
+SELECT * FROM users
+ORDER BY id DESC;
+
+--- Всі юзери за їхнім віком
+
+SELECT * FROM users
+ORDER BY birth_date ASC;
+
+-- Всі юзери за алфавітом по прізвищу
+
+SELECT * FROM users
+ORDER BY last_name ASC, first_name DESC;
+
+-- Як знайти ОДИН найдешевший телефон
+
+SELECT min(price)
+FROM products; -- Якийсь телефон коштує 23. ЯКИЙ?
+
+SELECT *
+FROM products
+ORDER BY price ASC
+LIMIT 1;
+
+--- Знайти топ-5 найдорожчих телефонів
+
+SELECT * 
+FROM products
+ORDER BY price DESC
+LIMIT 5;
+
+--- Відсортувати юзерів за кількістю повних років та імені, якщо кількість років однакова
+
+SELECT *, extract (years from age(birth_date))
+FROM users
+ORDER BY extract(years from age(birth_date)) ASC, first_name ASC;
+
+SELECT * FROM (
+    SELECT extract(years from age(birth_date)) as age, *
+    FROM users ) AS u_w_age
+ORDER BY age, first_name;
+
+---- Фільтрація груп
+-- HAVING
+
+SELECT count(*), age
+ FROM (
+    SELECT extract(years from age(birth_date)) as age, *
+    FROM users ) AS u_w_age
+GROUP BY age 
+HAVING count(*) > 6
+ORDER BY age;
