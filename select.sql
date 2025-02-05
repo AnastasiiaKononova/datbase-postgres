@@ -35,3 +35,136 @@ WHERE id % 2 = 0;
 SELECT * FROM users
 WHERE is_subscribe = 'TRUE' AND height > 1.5;
 
+-----
+SELECT * FROM users
+WHERE first_name IN ('John', 'Jane', 'William');
+
+SELECT * FROM users
+WHERE id IN (101, 120, 150);
+
+SELECT * FROM users
+WHERE id BETWEEN 100 AND 110;
+
+-- Таска: вибрати юзерів зростом від 1.5 до 1.9
+
+SELECT * FROM users
+WHERE height BETWEEN 1.5 AND 1.9;
+
+SELECT * FROM users
+WHERE height >= 1.5 AND height <= 1.9;
+
+-----
+
+SELECT * FROM users 
+WHERE first_name LIKE 'K%';
+
+/*
+
+% - будь-яка кількість будь-яких символів
+
+_ - 1 будь-який символ
+
+*/
+
+SELECT * FROM users
+WHERE first_name LIKE '___';
+
+-- Таска: знайти юзерів, імена яких закінчуються на літеру "а"
+
+-- ILIKE - реєстро-незалежна форма
+
+SELECT * FROM users
+WHERE first_name LIKE '%a';
+
+ALTER TABLE users
+ADD COLUMN weight INT CHECK (weight > 0);
+
+--- Оновлення даних
+
+UPDATE users
+SET weight = 60
+WHERE height > 1.5;
+
+-- Таска:оновити вагу користувачів, в яких довжина імені - 5 літер - встановити 90кг
+
+UPDATE users
+SET weight = 90
+WHERE first_name LIKE '_____';
+
+UPDATE users
+SET weight = 80
+WHERE id % 2 = 1
+RETURNING *;
+
+DELETE FROM users
+WHERE id = 52
+RETURNING *;
+
+--- Співробітники: збільшити зп на 20%
+
+UPDATE employees
+SET salary = salary * 1.2
+WHERE working_hours > 150;
+-----
+
+SELECT * FROM users
+WHERE birth_date > '1990-01-01';
+
+SELECT * FROM users
+WHERE extract(month from birth_date) = 9;
+
+SELECT * FROM users
+WHERE extract(days from birth_date) = 1;
+
+-- всі юзери, яким більше ніж 20 років:
+
+SELECT * FROM users
+WHERE extract(years from age(birth_date)) > 20;
+
+/*
+Таски:
+
+1. Отримати всіх повнолітніх користувачів чоловічого роду
+
+2. Отримати всіх користувачів жіночого роду, ім'я яких починається на "А"
+
+3. Отримати користувачів віком від 20 до 40 років (включно)
+
+4. Отримати всіх, хто народився в січні
+
+5. Всім користувачам, які народились 1 листопада змінити підписку на TRUE
+
+6. Всім користучам чоловічого роду зростом від 1.7 до 1.9 змінити вагу на 95кг.
+*/
+
+---1
+
+SELECT * FROM users
+WHERE extract(years from age(birth_date)) > 18 AND gender = 'male';
+
+--2
+
+SELECT * FROM users
+WHERE gender = 'female' AND first_name LIKE 'A%';
+
+--3
+
+SELECT * FROM users
+WHERE extract(years from age(birth_date)) BETWEEN 20 AND 40;
+
+--4
+
+SELECT * FROM users
+WHERE extract(month from birth_date) = 1;
+
+--5
+
+UPDATE users
+SET is_subscribe = TRUE
+WHERE extract(month from birth_date) = 11 AND extract(days from birth_date) = 1;
+
+--6
+
+UPDATE users
+SET weight = 95
+WHERE gender = 'male' AND height BETWEEN 1.7 AND 1.9;
