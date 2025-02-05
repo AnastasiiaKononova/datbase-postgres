@@ -168,3 +168,27 @@ WHERE extract(month from birth_date) = 11 AND extract(days from birth_date) = 1;
 UPDATE users
 SET weight = 95
 WHERE gender = 'male' AND height BETWEEN 1.7 AND 1.9;
+
+
+------ Alias - псевдонім
+
+SELECT id AS "Порядковий номер", 
+first_name AS name, 
+last_name AS "Прізвище", 
+gender AS "Стать", 
+email 
+FROM users;
+
+SELECT id, first_name AS "Name", last_name AS "Last name"
+FROM users AS u;
+
+SELECT id "Порядковий номер", first_name "Ім'я", last_name "Прізвище"
+FROM users; -- не раджу
+
+SELECT id, first_name, last_name
+FROM users AS u 
+WHERE u.id = 100; -- доступ до атрибута певної таблиці
+
+SELECT id, first_name, last_name 
+FROM users AS u   --- якщо я вже дала псевдонім таблиці, то я МАЮ звертатись далі за цим псевдонімом
+WHERE users.id = 100; -- вот тут маю звернутись до таблиці u
