@@ -286,3 +286,94 @@ WHERE char_length(email) < 10;
 7. Отримати користувачів, в яких непарний id і зп > 500
 
 */
+
+---1
+
+CREATE TABLE workers (
+    id serial PRIMARY KEY,
+    birthday date CHECK (birthday > '1900-01-01'),
+    name varchar(300) NOT NULL CHECK (name != ''),
+    salary int NOT NULL CHECK (salary > 0)
+);
+
+---2
+
+INSERT INTO workers (name, birthday, salary) VALUES
+('Yaroslava', '1987-02-06', 1200);
+
+---3
+
+INSERT INTO workers (name, birthday, salary) VALUES
+('Oleg', '1995-01-08', 400);
+
+---4
+
+INSERT INTO workers (name, birthday, salary) VALUES
+('Oleksandr', '1985-01-08', 900), ('Maria', '1995-03-08', 200);
+
+---UPDATE
+---1
+
+UPDATE workers
+SET salary = 500
+WHERE name = 'Oleg';
+
+---2
+
+UPDATE workers
+SET birthday = '1987-03-05'
+WHERE id = 4;
+
+---3
+
+UPDATE workers
+SET salary = 700
+WHERE salary < 500;
+
+---4
+
+UPDATE workers
+SET birthday = '1999-03-05'
+WHERE id BETWEEN 2 AND 5;
+
+---5
+
+UPDATE workers
+SET name = 'Evgeniy'
+WHERE name = 'Oleksandr';
+
+---SELECT
+---1
+
+SELECT * FROM workers
+WHERE id = 3;
+
+---2
+
+SELECT * FROM workers
+WHERE salary > 400;
+
+---3
+
+SELECT salary, birthday FROM workers
+WHERE name = 'Evgeniy';
+
+---4
+
+SELECT * FROM workers
+WHERE name LIKE 'Pet%';
+
+---5
+
+SELECT * FROM workers
+WHERE (extract(YEAR FROM age(birthday)) = 27 OR salary > 1000);
+
+---6
+
+SELECT * FROM workers
+WHERE extract(years from age(birthday)) BETWEEN 25 AND 28;
+
+---7
+
+SELECT * FROM workers
+WHERE id % 2 !=0 AND salary > 500;
