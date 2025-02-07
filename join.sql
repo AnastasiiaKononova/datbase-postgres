@@ -118,3 +118,135 @@ SELECT A.v AS "id",
 FROM a, b
 WHERE A.v = B.v;
 
+-- JOIN
+
+SELECT *
+FROM a JOIN b
+ON A.v = B.v;
+
+--- JOIN - ключове слово для операції співставлення таблиць
+
+-- ON - частина оператора JOIN, після нього йде умова вибірки з декартового добутку
+
+-- частіше за все ця умова - співставлення Primary Key = Foreign Key
+
+SELECT * 
+FROM users JOIN orders
+ON orders.customer_id = users.id
+WHERE users.id = 2;
+
+-- Таска: знайти всі замовлення юзерів з 3 по 5
+
+SELECT * 
+FROM users JOIN orders
+ON orders.customer_id = users.id
+WHERE users.id BETWEEN 3 AND 5;
+---
+
+SELECT * 
+FROM  users JOIN orders
+ON orders.customer_id = users.id;
+
+
+--- Задача: витягти інформацію про юзерів та кількість їхніх замовлень
+
+-- Кількість замовлень кожного юзера
+SELECT count(*), customer_id
+FROM orders
+GROUP BY customer_id;
+
+
+-- Всі юзери з кількістю їхніх замовлень
+SELECT users.id, first_name, last_name, email, count(*) AS order_count 
+FROM users JOIN orders
+ON users.id = orders.customer_id
+GROUP BY users.id;
+
+--- 
+
+-- Всі замовлення юзера #3 і ті телефони, які він замовив
+
+SELECT * FROM users
+WHERE id = 3;
+
+SELECT * FROM orders
+WHERE customer_id = 3; -- ми дізнались, що він зробив замовлення №6
+
+SELECT * FROM orders_to_products
+WHERE order_id = 6; -- ми дізнались, що в цьому замовленні було замовлено 4 екземпляри продукту №113 і 3 екземпляри продукту №203
+
+SELECT * 
+FROM users JOIN orders
+ON users.id = orders.customer_id
+JOIN orders_to_products ON orders.id = orders_to_products.order_id
+WHERE users.id = 3;
+
+
+--- Таска: знайти всі замовлення, в яких були замовлені будь-які моделі Самсунга
+
+
+SELECT * 
+FROM products JOIN orders_to_products 
+ON products.id = orders_to_products.product_id
+WHERE brand = 'Samsung';
+
+
+--- id юзерів, які замовляли телефони  Samsung
+SELECT customer_id 
+FROM products JOIN orders_to_products 
+ON products.id = orders_to_products.product_id
+JOIN orders ON orders_to_products.order_id = orders.id
+WHERE brand = 'Samsung'
+GROUP BY customer_id;
+
+
+-- дізнатись мейли всіх, хто замовляв телефони Samsung
+
+SELECT email 
+FROM products JOIN orders_to_products 
+ON products.id = orders_to_products.product_id
+JOIN orders ON orders_to_products.order_id = orders.id
+JOIN users ON orders.customer_id = users.id
+WHERE brand = 'Samsung'
+GROUP BY email;
+
+
+SELECT email 
+FROM products AS p
+JOIN orders_to_products AS otp
+ON p.id = otp.product_id
+JOIN orders AS o
+ON otp.order_id = o.id
+JOIN users AS u
+ON o.customer_id = u.id
+WHERE brand = 'Samsung'
+GROUP BY email;
+
+
+/* 
+Вивести всі замовлення та кошторис цього замовлення
+*/
+SELECT otp.order_id, sum(p.price*otp.quantity) 
+FROM orders_to_products AS otp
+JOIN products AS p
+ON otp.product_id = p.id
+GROUP BY otp.order_id;
+
+
+--- Перевіряємо:
+-- order 273 --- 44350.53
+SELECT * 
+FROM orders_to_products
+WHERE order_id = 273;
+
+SELECT * 
+FROM products
+WHERE id IN (180, 162, 156, 133);
+
+
+/*
+180 * 3 = 1003.61
+162 * 2 = 8742.58
+156 * 4 = 4354.96
+133 * 1 = 6434.70
+*/
