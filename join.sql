@@ -250,3 +250,107 @@ WHERE id IN (180, 162, 156, 133);
 156 * 4 = 4354.96
 133 * 1 = 6434.70
 */
+
+-- Задача: отримати мейли користувачів, які НЕ робили замовлень
+
+
+--- Всі юзери, які РОБИЛИ замовлення та кількість їхніх замовлень
+
+SELECT u.*, count(o.id)
+FROM users AS u
+JOIN orders AS o
+ON u.id = o.customer_id
+GROUP BY u.id;
+
+-- Всі юзери, незалежно від того, робили замовлення чи ні
+
+SELECT u.*, count(o.id)
+FROM users AS u
+LEFT JOIN orders AS o
+ON u.id = o.customer_id
+GROUP BY u.id
+ORDER BY u.id DESC;
+
+--- ТІЛЬКИ юзери без замовлень
+
+SELECT u.*
+FROM users AS u
+LEFT JOIN orders AS o
+ON u.id = o.customer_id
+WHERE o.id IS NULL;
+
+INSERT INTO products (category, price, quantity, brand, model)
+VALUES (
+    'TV',
+    100,
+    1,
+    'Noname',
+    '111'
+  );
+
+
+-- Знайти продукт, який ніколи не купували
+
+-- Всі продукти, які фігурували в замовленнях
+  SELECT p.* 
+  FROM orders_to_products AS otp
+  JOIN products AS p 
+  ON otp.product_id = p.id
+  GROUP BY p.id;
+
+-- ВСІ продукти, навіть ті, які не купували
+
+  SELECT p.* 
+  FROM orders_to_products AS otp
+  RIGHT JOIN products AS p 
+  ON otp.product_id = p.id
+  GROUP BY p.id;
+
+  SELECT p.* 
+  FROM orders_to_products AS otp
+  RIGHT JOIN products AS p 
+  ON otp.product_id = p.id
+  WHERE otp.order_id IS NULL;
+
+  /*
+
+Знайти найпопулярніший продукт
+- порахувати, скільки замовлень стосувалося цього товару
+- порахувати кількість проданих екземплярів
+
+  */
+
+
+  SELECT p.*, sum(otp.quantity) 
+  FROM orders_to_products AS otp
+  JOIN products AS p
+  ON otp.product_id = p.id
+  GROUP BY p.id;
+
+
+  -- Перевіряємо: 
+  -- продукт 115 купували 59 штук
+
+  SELECT * FROM orders_to_products AS otp
+  WHERE product_id = 115;
+
+    SELECT p.*, sum(otp.quantity) 
+  FROM orders_to_products AS otp
+  JOIN products AS p
+  ON otp.product_id = p.id
+  GROUP BY p.id
+  ORDER BY sum(otp.quantity) DESC
+  LIMIT 1;
+
+
+  -- ТОП-3 найпопулярніших
+      SELECT p.*, sum(otp.quantity) 
+  FROM orders_to_products AS otp
+  JOIN products AS p
+  ON otp.product_id = p.id
+  GROUP BY p.id
+  ORDER BY sum(otp.quantity) DESC
+  LIMIT 3;
+
+
+  
