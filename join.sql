@@ -353,4 +353,72 @@ VALUES (
   LIMIT 3;
 
 
-  
+/* Hometasks:
+1. Знайти топ-5 брендів, які продали найбільше товарів
+2. Знайти середній чек по магазину
+(порахувати вартість кожного замовлення - ціна продукту*кількість екземлярів) і порахувати середнє арифметичне
+3. Витягти всіх користувачів, в яких кількість замовлень вище середнього
+
+*/
+
+---1
+
+SELECT sum(otp.quantity), brand
+FROM orders_to_products AS otp
+JOIN products AS p
+ON otp.product_id = p.id
+GROUP BY brand
+ORDER BY sum(otp.quantity) DESC
+LIMIT 5;
+
+---2
+
+
+--- Всі замовлення та їхній кошторис
+SELECT sum(otp.quantity * p.price), otp.order_id
+FROM orders_to_products AS otp
+JOIN products AS p
+ON otp.product_id = p.id
+GROUP BY otp.order_id;
+
+SELECT avg(ows.sum)
+FROM (
+  SELECT otp.order_id, sum(otp.quantity*p.price) AS sum
+FROM orders_to_products AS otp
+JOIN products AS p 
+ON otp.product_id = p.id
+GROUP BY otp.order_id
+) AS ows;
+
+---3
+
+--- Всі користувачі та кількість їхніх замовлень
+
+SELECT u.*, count(*) AS orders_count
+FROM users AS u 
+LEFT JOIN orders AS o
+ON o.customer_id = u.id
+GROUP BY u.id;
+
+SELECT avg(uwoc.orders_count) 
+  FROM (SELECT u.*, count(*) AS orders_count
+FROM users AS u 
+LEFT JOIN orders AS o
+ON o.customer_id = u.id
+GROUP BY u.id) AS uwoc; ---2.5
+
+
+-- Юзери, кількість замовлень яких більше середнього показника
+  SELECT u.*, count(*) AS orders_count
+  FROM users AS u 
+  LEFT JOIN orders AS o
+  ON o.customer_id = u.id
+  GROUP BY u.id
+  HAVING count(*) > (SELECT avg(uwoc.orders_count) 
+  FROM (SELECT u.*, count(*) AS orders_count
+FROM users AS u 
+LEFT JOIN orders AS o
+ON o.customer_id = u.id
+GROUP BY u.id) AS uwoc);
+
+--- REFACTOR (WITH)
