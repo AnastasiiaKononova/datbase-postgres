@@ -90,3 +90,34 @@ ON employees.position = positions.name;
 
 INSERT INTO employees (name, position)
 VALUES ('Rick', 'Driver');
+
+---- 3NF
+
+DROP TABLE employees;
+DROP TABLE positions;
+
+CREATE TABLE employees (
+    id serial PRIMARY KEY,
+    name varchar(300),
+    deparment varchar(300),
+    department_phone varchar(10)
+);
+
+INSERT INTO employees (name, deparment, department_phone) VALUES
+('John', 'HR', '222-111-22'),
+('Jane', 'Sales', '333-222-11');
+
+--- Номер департамента залежить від департамента, а не від робітника
+-- Рішення: декомпозиція таблиці
+
+
+CREATE TABLE deparments(
+    name varchar(300) PRIMARY KEY,
+    phone varchar(10)
+);
+
+CREATE TABLE employees (
+    id serial PRIMARY KEY,
+    name varchar(300),
+    deparment varchar(300) REFERENCES deparments(name)
+); -- 3NF
