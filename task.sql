@@ -26,7 +26,7 @@ CREATE TABLE orders (
 
 CREATE TABLE shipments (
     id serial PRIMARY KEY,
-    ship_date date CHECK (ship_date <= currrent_date)
+    ship_date date CHECK (ship_date <= current_date)
 );
 
 CREATE TABLE shipments_to_orders (
