@@ -262,3 +262,23 @@ FROM orders_to_products AS otp
 FULL JOIN products AS p
 ON otp.product_id = p.id
 WHERE otp.product_id IS NULL; --Catch it!
+
+-- Задача: зробити вью з всіма юзерами і повною сумою грошей, які юзери залишили в нашому магазині
+
+SELECT u.*, sum(order_sum) 
+FROM users AS u
+JOIN orders_with_cash_amounts AS owca 
+ON u.id = owca.customer_id
+GROUP BY u.id;
+
+CREATE VIEW users_with_full_order_sum AS (
+    SELECT u.*, sum(order_sum) 
+    FROM users AS u
+    JOIN orders_with_cash_amounts AS owca 
+    ON u.id = owca.customer_id
+    GROUP BY u.id
+);
+
+SELECT * FROM users_with_full_order_sum
+ORDER BY sum DESC
+LIMIT 10;
